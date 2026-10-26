@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#39ff14">
+<title>Instalar LMP</title>
+<style>body{font:17px system-ui;padding:20px;text-align:center}img{width:96px;border-radius:22px}button{font:inherit;font-weight:700;padding:16px;width:100%;border:0;border-radius:14px;background:#39ff14;margin-top:16px}#m{margin-top:16px}</style></head><body>
+<img src="icon-192.png" alt="LMP"><h2>LMP Mensajería Masiva</h2>
+<button id="b">📲 Instalar app</button><p id="m">Esperando a Chrome…</p>
+<script>
+var ev=null,m=document.getElementById('m');
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;m.textContent='Listo para instalar. Tocá el botón.'});
+window.addEventListener('appinstalled',function(){m.textContent='✅ Instalada. Buscá el ícono LMP en tu pantalla de inicio o en el cajón de apps.'});
+document.getElementById('b').onclick=function(){
+ if(!ev){m.textContent='Chrome todavía no habilitó la instalación. Esperá unos segundos y tocá de nuevo.';return}
+ ev.prompt();
+ ev.userChoice.then(function(r){m.textContent=r.outcome==='accepted'?'✅ Aceptaste. Buscá el ícono LMP en tu pantalla de inicio o en el cajón de apps.':'Cancelaste la instalación.'});
+};
+</script></body></html>
