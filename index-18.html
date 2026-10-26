@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#39ff14">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<title>LMP Mensajería Masiva</title>
+<style>
+:root{--n:#39ff14;--i:#0b1f0b;--c:#e9ffe3;--l:#e3e8e3}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font:15px system-ui,sans-serif;color:var(--i);background:#fff}
+#app{display:flex;flex-direction:column;height:100%}
+.hd{background:var(--n);padding:12px 14px;display:flex;justify-content:space-between;align-items:center}.hd b{display:block;font-size:19px}.hd small{font-size:12px}
+.bd{flex:1;overflow:auto;padding:12px}.lg{flex:1;overflow:auto;padding:26px 22px;background:linear-gradient(#fff,var(--c))}
+.logo{width:80px;height:80px;border-radius:22px;background:var(--n);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;margin:18px 0 12px}
+.it{display:flex;gap:10px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--l)}
+.av{width:44px;height:44px;border-radius:50%;background:#b9f6a8;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.bt{display:block;width:100%;border:0;border-radius:14px;background:var(--n);color:var(--i);font:inherit;font-weight:800;padding:12px;margin-top:8px;text-align:center;text-decoration:none}.bt.o{background:#fff;border:2px solid #1fd10a}
+.sm{border:0;border-radius:12px;padding:6px 10px;font-weight:800;background:var(--n);margin:2px;color:var(--i)}.sm.r{background:#fff;border:2px solid #c0121f;color:#c0121f}
+input.f{width:100%;border:2px solid var(--l);border-radius:12px;padding:11px;margin-top:8px;font:inherit}
+.cd{border:1px solid var(--l);border-radius:16px;padding:12px;margin-bottom:12px}
+.nav{display:flex;border-top:1px solid var(--l)}.nav button{flex:1;border:0;background:none;padding:10px;font:inherit;font-size:13px}.nav .on{font-weight:800;background:var(--c)}
+.ms{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px;background:#f6fff3}
+.m{max-width:80%;padding:7px 11px;border-radius:12px;background:#fff;align-self:flex-start;word-wrap:break-word}.m.o{align-self:flex-end;background:#d9ffd0}.m img{max-width:100%;border-radius:8px}.m audio{max-width:100%}
+.m.sk{text-align:center;border:3px solid #1fd10a;background:var(--c);border-radius:18px}.sk b{background:var(--n);padding:1px 8px;border-radius:10px}
+.ft{display:flex;gap:6px;padding:8px;border-top:1px solid var(--l)}.ft input{flex:1;min-width:0;border:2px solid var(--l);border-radius:20px;padding:10px 14px;font:inherit}.ft button{border:0;border-radius:50%;width:42px;height:42px;font-size:19px;background:var(--c)}
+.pn{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px;max-height:40vh;overflow:auto;border-top:2px solid var(--n)}.pn button{border:2px solid #1fd10a;border-radius:14px;background:var(--c);padding:6px;font:inherit;font-size:12px}
+.er{color:#c0121f;font-weight:700;margin-top:8px}.ok{color:#0a8a00;font-weight:700;margin-top:8px}.bg{background:var(--n);border-radius:10px;padding:1px 8px;font-weight:800}
+.pw{position:relative}.pw input.f{padding-right:52px}.ey{position:absolute;right:2px;top:8px;height:calc(100% - 8px);width:48px;border:0;background:none;font-size:20px;cursor:pointer}
+</style></head><body><div id="app"></div>
+<input type="file" id="fi" accept="image/*,application/pdf,audio/*" hidden>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// ====== PEGÁ ACÁ TUS DOS DATOS DE SUPABASE (Project Settings > API) ======
+var URL_="https://gvhoaetijhpncwgeufpr.supabase.co",KEY="sb_publishable_UC9pjy80NHuI86inRzezQw_fG0Laz8F";
+// =========================================================================
+var sb=supabase.createClient(URL_,KEY),$=function(i){return document.getElementById(i)};
+var S=[["⚡💸","Ya te cargo"],["✅🎮","Cargado"],["🏷️📲","Alias"],["🏦🔢","CBU"],["⏳😊","Espere un momento"],["🍀🎰","Suerte"],["🏆🎉","Felicidades por tu premio"],["💰✅","Premio abonado"],["👋😄","¡Hola!"],["☀️🙂","Buen día"],["🌤️🙂","Buenas tardes"],["🌙😴","Buenas noches"],["🙏💚","Gracias"],["🤝😊","De nada"],["👍✅","Ok"],["🏃💨","Enseguida"],["🔍👀","Verificando"],["😅🙏","Disculpá la demora"],["🧾📤","Mandame el comprobante"],["🧾✅","Comprobante recibido"],["💳🔄","Pago pendiente"],["💸✅","Pago recibido"],["🎁🎉","Bono de regalo"],["🎊🥳","Bienvenido"],["🎉🥇","¡Ganaste!"],["🚀💰","Premio en camino"],["👤🔑","Pasame tu usuario"],["🔐🤫","No compartas tu clave"],["❓🤔","¿Te ayudo?"],["🙌🍀","Mucha suerte"],["😎👌","Todo listo"],["👋🌟","Hasta pronto"]];
+var me=null,peer=null,tab="chats",lr="",P=[],M=[],err="",msg="",sk=false,rec=null,nc=false,draft="",urls={},cp=false,fg=false;
+var RN={admin:"administrador",agent:"agentes",client:"jugadores"};
+var FGT={admin:"La contraseña del administrador se restablece desde Supabase, en SQL Editor, con la consulta de cambio de contraseña.",agent:"Pedile al administrador que te ponga una contraseña nueva desde el Panel, con el botón 🔑 Clave junto a tu nombre.",client:"Pedile a tu agente que te ponga una contraseña nueva: en su lista de chats tiene el botón 🔑 junto a tu nombre."};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function em(u){return u.trim().toLowerCase()+"@lmp.app"}
+function ini(n){return n.split(" ").map(function(w){return w[0]}).slice(0,2).join("").toUpperCase()}
+function pn(x){return x.role=="admin"?"Administración LMP":x.full_name}
+function pv(m){return m.kind=="text"?m.body:m.kind=="sticker"?"Sticker":m.kind=="img"?"📷 Foto":m.kind=="pdf"?"📄 "+m.fname:"🎤 Audio"}
+function gu(p){if(urls[p])return Promise.resolve(urls[p]);return sb.storage.from("media").createSignedUrl(p,3600).then(function(r){return urls[p]=r.data&&r.data.signedUrl})}
+function opf(p){gu(p).then(function(u){window.open(u,"_blank")})}
+function cpy(t){navigator.clipboard.writeText(t).then(function(){err="✓ Copiado";R()},function(){})}
+function usable(p){if(p.status!="active")return false;if(p.role=="agent")return p.paid||new Date(p.trial_until)>new Date();if(p.role=="client"){var a=P.find(function(x){return x.id==p.agent_id});return !a||usable(a)}return true}
+function landV(){return '<div class="lg"><div class="logo">LMP</div><h1 style="margin:0">LMP Mensajería Masiva</h1><p>Conectados en privado. Comunicados sin límites.</p><button class="bt" onclick="pl(\'admin\')">🛡️ Ingreso administrador</button><button class="bt o" onclick="pl(\'agent\')">🎧 Ingreso agentes</button><button class="bt o" onclick="pl(\'client\')">🎮 Ingreso jugadores</button></div>'}
+function pl(r){lr=r;err="";fg=false;R()}
+function loginV(){return '<div class="lg"><div class="logo">LMP</div><h1 style="margin:0">Ingreso de '+RN[lr]+'</h1><input class="f" id="lu" placeholder="Usuario" autocapitalize="none" autocomplete="username">'+pwf("lp","Contraseña","current-password","login()")+'<button class="bt" onclick="login()">Entrar</button><button class="bt o" onclick="fg=!fg;R()">¿Olvidaste tu contraseña?</button>'+(fg?'<div class="cd" style="margin-top:12px">'+FGT[lr]+'</div>':"")+'<button class="bt o" onclick="pl(\'\')">← Volver</button>'+(err?'<div class="er">'+esc(err)+'</div>':"")+'</div>'}
+async function login(){if(window.LMP)LMP.pedirPermiso();var r=await sb.auth.signInWithPassword({email:em($("lu").value),password:$("lp").value});if(r.error){err="Usuario o contraseña incorrectos";return R()}err="";await boot()}
+async function boot(){var s=await sb.auth.getUser();if(!s.data.user)return R();
+ var r=await sb.from("profiles").select("*").eq("id",s.data.user.id).maybeSingle();me=r.data;
+ if(!me||(lr&&me.role!=lr)){await sb.auth.signOut();me=null;err="Usuario o contraseña incorrectos";return R()}
+ lr=me.role;await load();
+ if(!usable(me)){await sb.auth.signOut();me=null;lr="";err="Tu prueba terminó o tu cuenta está suspendida. Contactá a tu administrador.";return R()}
+ if(me.role=="client")peer=P.find(function(x){return x.id==me.agent_id});
+ sub();R()}
+async function load(){var a=await sb.from("profiles").select("*");P=(a.data||[]).filter(function(x){return x.id!=me.id});var b=await sb.from("messages").select("*").order("created_at").limit(1000);M=b.data||[]}
+function sub(){sb.channel("m").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},function(e){var m=e.new;if(M.some(function(x){return x.id==m.id}))return;M.push(m);
+ if(m.receiver==me.id&&window.LMP){var q=P.find(function(x){return x.id==m.sender});LMP.nuevoMensaje(q?pn(q):"LMP",pv(m))}
+ if(peer&&m.sender==peer.id)rd(m.sender);R()}).subscribe()}
+function rd(id){sb.from("messages").update({read_at:new Date().toISOString()}).eq("receiver",me.id).eq("sender",id).is("read_at",null).then(function(){});M.forEach(function(m){if(m.sender==id&&m.receiver==me.id&&!m.read_at)m.read_at=1})}
+async function out(){await sb.auth.signOut();me=null;peer=null;lr="";cp=false;fg=false;R()}
+function op(id){peer=P.find(function(x){return x.id==id});rd(id);err="";R()}
+function tb(t){tab=t;msg="";R()}
+async function send(kind,body,fname){var r=await sb.from("messages").insert({sender:me.id,receiver:peer.id,kind:kind,body:String(body),fname:fname||null}).select().single();
+ if(r.error){err="No se pudo enviar (cuenta vencida o sin permiso)";return R()}
+ if(!M.some(function(x){return x.id==r.data.id}))M.push(r.data);sk=false;err="";R()}
+function st(){var v=draft.trim();if(v){draft="";send("text",v)}}
+function shrink(f){return new Promise(function(ok){var im=new Image();im.onload=function(){var k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas"),x;c.width=im.width*k;c.height=im.height*k;x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(ok,"image/jpeg",.8)};im.src=URL.createObjectURL(f)})}
+async function up(f){var t=f.type||"",k=t.indexOf("image/")==0?"img":t=="application/pdf"?"pdf":t.indexOf("audio/")==0?"audio":"";
+ if(!k){err="Solo se pueden enviar imágenes, PDF y audios";return R()}
+ var b=k=="img"?await shrink(f):f,ext=k=="img"?"jpg":k=="pdf"?"pdf":(t.split("/")[1]||"webm").split(";")[0],path=me.id+"/"+Date.now()+"."+ext;
+ var r=await sb.storage.from("media").upload(path,b,{contentType:k=="img"?"image/jpeg":t});
+ if(r.error){err="No se pudo subir el archivo";return R()}send(k,path,f.name||"")}
+async function mic(){if(rec){rec.stop();return}
+ try{var s=await navigator.mediaDevices.getUserMedia({audio:true}),ch=[];rec=new MediaRecorder(s);rec.ondataavailable=function(e){ch.push(e.data)};
+ rec.onstop=function(){s.getTracks().forEach(function(t){t.stop()});var t=rec.mimeType||"audio/webm";rec=null;up(new File(ch,"audio",{type:t}))};rec.start();R()}
+ catch(e){err="Dale permiso al micrófono desde el candado de la barra del navegador";R()}}
+$("fi").onchange=function(){var f=this.files[0];this.value="";if(f&&peer)up(f)};
+document.addEventListener("paste",function(e){if(!me||!peer||!e.clipboardData)return;var fs=e.clipboardData.files||[];for(var i=0;i<fs.length;i++)if(fs[i].type.indexOf("image/")==0){e.preventDefault();up(fs[i]);return}});
+function mh(m){var o=m.sender==me.id?" o":"",t=new Date(m.created_at),h=t.getHours()+":"+("0"+t.getMinutes()).slice(-2);
+ if(m.kind=="sticker"){var s=S[+m.body]||["❔",""];return '<div class="m sk'+o+'"><div style="font-size:42px">'+s[0]+'</div><b>'+s[1]+'</b></div>'}
+ if(m.kind=="img")return '<div class="m'+o+'"><img data-p="'+esc(m.body)+'" alt="Foto" onclick="opf(this.dataset.p)"><br><small>'+h+'</small></div>';
+ if(m.kind=="audio")return '<div class="m'+o+'"><audio controls preload="none" data-p="'+esc(m.body)+'"></audio><br><small>'+h+'</small></div>';
+ if(m.kind=="pdf")return '<div class="m'+o+'" data-f="'+esc(m.body)+'" onclick="opf(this.dataset.f)">📄 '+esc(m.fname)+'<br><b>Abrir PDF</b> <small>'+h+'</small></div>';
+ return '<div class="m'+o+'" data-t="'+esc(m.body)+'" onclick="cpy(this.dataset.t)">'+esc(m.body)+' <small>'+h+'</small></div>'}
+function chatV(){var t=M.filter(function(m){return m.sender==peer.id||m.receiver==peer.id});
+ return '<div class="hd">'+(me.role=="client"?"":'<button class="sm" onclick="peer=null;sk=false;R()">←</button>')+'<div style="flex:1;padding-left:8px"><b>'+esc(pn(peer))+'</b><small>Tocá un texto para copiarlo</small></div><button class="sm" onclick="cp=true;R()">🔑 Clave</button><button class="sm" onclick="out()">Salir</button></div><div class="ms">'+t.map(mh).join("")+'</div>'+(err?'<div class="er" style="padding:4px 10px">'+esc(err)+'</div>':"")+(sk?'<div class="pn">'+S.map(function(s,i){return '<button onclick="send(\'sticker\','+i+')">'+s[0]+'<br>'+s[1]+'</button>'}).join("")+'</div>':"")+'<div class="ft"><button onclick="sk=!sk;R()">😀</button><button onclick="$(\'fi\').click()">📎</button><input id="tx" placeholder="Escribí un mensaje" value="'+esc(draft)+'" oninput="draft=this.value" onkeydown="if(event.key==\'Enter\')st()"><button onclick="mic()">'+(rec?"■":"🎤")+'</button><button style="background:var(--n)" onclick="st()">➤</button></div>'}
+function listV(){var L=P.filter(function(x){return me.role!="admin"||x.role=="agent"}),h=me.role=="agent"?'<button class="bt" onclick="nc=!nc;R()">+ Nuevo jugador</button>'+(nc?formV("client","Nuevo jugador"):""):"";
+ return h+(L.map(function(x){var t=M.filter(function(m){return m.sender==x.id||m.receiver==x.id}),l=t[t.length-1],u=t.filter(function(m){return m.sender==x.id&&!m.read_at}).length;
+ return '<div class="it" onclick="op(\''+x.id+'\')"><div class="av">'+esc(ini(pn(x)))+'</div><div style="flex:1;min-width:0"><b>'+esc(pn(x))+'</b><br><small>'+esc(l?pv(l):"Sin mensajes")+'</small></div>'+(me.role=="agent"&&x.role=="client"?'<button class="sm" onclick="event.stopPropagation();rp(\''+x.id+'\')">🔑</button>':"")+(u?'<span class="bg">'+u+'</span>':"")+'</div>'}).join("")||"<p>Todavía no tenés chats.</p>")}
+function formV(r,t){return '<div class="cd"><b>'+t+'</b><input class="f" id="nn" placeholder="Nombre y apellido"><input class="f" id="nu" placeholder="Usuario (sin espacios ni tildes)" autocapitalize="none">'+pwf("np","Contraseña (6 o más caracteres)","new-password")+'<button class="bt" onclick="mk(\''+r+'\')">Crear</button>'+(msg?'<div class="'+(msg[0]=="✓"?"ok":"er")+'">'+esc(msg)+'</div>':"")+'</div>'}
+async function mk(role){var n=$("nn").value.trim(),u=$("nu").value.trim().toLowerCase(),p=$("np").value;
+ if(!n||!/^[a-z0-9._-]{3,}$/.test(u)||p.length<6){msg="Completá todo: usuario de 3+ letras o números sin espacios ni tildes, y clave de 6+ caracteres";return R()}
+ var t=supabase.createClient(URL_,KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:"tmp"}});
+ var a=await t.auth.signUp({email:em(u),password:p});
+ if(a.error||!a.data.user){msg="No se pudo crear: "+(a.error?a.error.message:"");return R()}
+ var r=await sb.rpc("make_user",{uid:a.data.user.id,uname:u,fname:n,r:role});
+ msg=r.error?"Error: "+r.error.message:"✓ Creado. Pasale usuario: "+u+" y clave: "+p;await load();R()}
+async function upd(id,o){await sb.from("profiles").update(o).eq("id",id);await load();R()}
+function act(id){upd(id,{paid:true,status:"active"})}
+function sus(id){upd(id,{status:"suspended"})}
+function ext(id){var a=P.find(function(x){return x.id==id});upd(id,{paid:false,status:"active",trial_until:new Date(Math.max(Date.now(),new Date(a.trial_until))+6048e5).toISOString()})}
+function panV(){var A=P.filter(function(x){return x.role=="agent"});
+ return '<div class="cd"><b>Agentes</b>'+(A.map(function(a){var d=Math.ceil((new Date(a.trial_until)-Date.now())/864e5),s=a.status!="active"?"suspendido":a.paid?"activo":d>0?"prueba · "+d+" días":"prueba vencida",n=P.filter(function(x){return x.agent_id==a.id}).length;
+ return '<div class="it"><div class="av">'+esc(ini(a.full_name))+'</div><div><b>'+esc(a.full_name)+'</b><br><small>'+esc(a.username)+' · '+n+' jugadores · '+s+'</small></div></div><div><button class="sm" onclick="rp(\''+a.id+'\')">🔑 Clave</button><button class="sm" onclick="act(\''+a.id+'\')">Activar</button><button class="sm" onclick="ext(\''+a.id+'\')">+7 días</button><button class="sm r" onclick="sus(\''+a.id+'\')">Suspender</button></div>'}).join("")||"<p>Todavía no creaste agentes.</p>")+'</div>'+formV("agent","Nuevo agente (7 días de prueba)")}
+function supV(){return '<div class="cd"><b>Luis Miguel Palacio</b><br>Desarrollador de Mensajería Masiva<a class="bt" href="https://wa.me/5493562418003" target="_blank">Contactame por WhatsApp</a></div><div class="cd"><b>Soporte técnico</b><p>Exclusivo para agentes. Tus jugadores no ven esta sección.</p></div>'}
+function mainV(){var t=tab=="chats"?"Chats":tab=="panel"?"Panel de administrador":"Soporte técnico",b=tab=="chats"?listV():tab=="panel"?panV():supV();
+ return '<div class="hd"><div><b>'+t+'</b><small>'+esc(me.full_name)+' · '+({admin:"Administrador",agent:"Agente",client:"Jugador"})[me.role]+'</small></div><div><button class="sm" onclick="LMP.setSonido(true);LMP.pedirPermiso()">🔔</button><button class="sm" onclick="cp=true;R()">🔑 Clave</button><button class="sm" onclick="out()">Salir</button></div></div><div class="bd">'+b+'</div><div class="nav"><button class="'+(tab=="chats"?"on":"")+'" onclick="tb(\'chats\')">💬 Chats</button>'+(me.role=="admin"?'<button class="'+(tab=="panel"?"on":"")+'" onclick="tb(\'panel\')">🛡️ Panel</button>':"")+(me.role!="client"?'<button class="'+(tab=="sup"?"on":"")+'" onclick="tb(\'sup\')">🎧 Soporte</button>':"")+'</div>'}
+function pwf(id,ph,ac,ek){return '<div class="pw"><input class="f" id="'+id+'" type="password" placeholder="'+ph+'" autocomplete="'+(ac||"off")+'"'+(ek?' onkeydown="if(event.key==\'Enter\')'+ek+'"':"")+'><button type="button" class="ey" aria-label="Mostrar contraseña" onclick="tp(\''+id+'\',this)">👁️</button></div>'}
+function tp(id,b){var i=$(id),s=i.type=="password";i.type=s?"text":"password";b.textContent=s?"🙈":"👁️";b.setAttribute("aria-label",s?"Ocultar contraseña":"Mostrar contraseña")}
+function cpV(){return '<div class="hd"><div><b>Cambiar contraseña</b><small>'+esc(me.full_name)+'</small></div><button class="sm" onclick="cp=false;R()">Cancelar</button></div><div class="bd"><div class="cd">'+pwf("c0","Contraseña actual","current-password")+pwf("c1","Contraseña nueva (6 o más caracteres)","new-password")+pwf("c2","Repetí la contraseña nueva","new-password","chpw()")+'<button class="bt" onclick="chpw()">Guardar contraseña</button><div id="cpm"></div></div></div>'}
+function cpe(t){var e=$("cpm");e.className="er";e.textContent=t}
+async function chpw(){var a=$("c0").value,b=$("c1").value,c=$("c2").value;
+ if(!a)return cpe("Escribí tu contraseña actual");
+ if(b.length<6)return cpe("La contraseña nueva debe tener 6 o más caracteres");
+ if(b!=c)return cpe("Las contraseñas nuevas no coinciden");
+ if(b==a)return cpe("La contraseña nueva tiene que ser distinta de la actual");
+ var v=await sb.auth.signInWithPassword({email:em(me.username),password:a});
+ if(v.error)return cpe("La contraseña actual no es correcta");
+ var u=await sb.auth.updateUser({password:b});
+ if(u.error)return cpe("No se pudo cambiar: "+u.error.message);
+ cp=false;R();alert("✓ Contraseña cambiada. Usá la nueva la próxima vez que ingreses.")}
+async function rp(id){var a=P.find(function(x){return x.id==id});if(!a)return;
+ var p=prompt("Nueva contraseña para "+a.full_name+" ("+a.username+"). Mínimo 6 caracteres:");if(p===null)return;p=p.trim();
+ if(p.length<6){alert("La contraseña debe tener 6 o más caracteres");return}
+ var r=await sb.rpc("reset_password",{uid:id,newpass:p});
+ alert(r.error?"No se pudo cambiar: "+r.error.message:"✓ Listo. "+a.username+" ya puede entrar con la clave nueva: "+p)}
+function R(){$("app").innerHTML=!me?(lr?loginV():landV()):cp?cpV():peer?chatV():mainV();var m=document.querySelector(".ms");if(m)m.scrollTop=m.scrollHeight;
+ document.querySelectorAll("[data-p]").forEach(function(e){gu(e.dataset.p).then(function(u){if(u)e.src=u})})}
+(async function(){var s=await sb.auth.getSession();if(s.data.session)await boot();else R()})();
+</script>
+<script src="lmp-pwa.js"></script>
+</body></html>
