@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<title>Prueba LMP</title>
+<style>body{font:16px system-ui;padding:16px}p{margin:6px 0;word-break:break-word}button{font:inherit;padding:12px;margin:12px 0;width:100%}</style></head><body>
+<h2>Prueba LMP</h2><div id="r"></div><button id="b">🔔 Probar sonido</button>
+<script>
+var r=document.getElementById('r'),got=false;
+function L(ok,t){var p=document.createElement('p');p.textContent=(ok?'✅ ':'❌ ')+t;r.appendChild(p)}
+async function chk(f){try{var x=await fetch(f+'?x='+Date.now(),{cache:'no-store'});return x.ok?await x.text():null}catch(e){return null}}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();got=true});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+(async function(){
+ L(isSecureContext,'Sitio seguro (https)');
+ var m=await chk('manifest.json');
+ if(m===null)L(false,'manifest.json no se encuentra');
+ else{try{var j=JSON.parse(m);L(true,'manifest.json válido: '+j.name)}catch(e){L(false,'manifest.json tiene un error de escritura')}}
+ L(await chk('icon-192.png')!==null,'icon-192.png');
+ L(await chk('icon-512.png')!==null,'icon-512.png');
+ var i=await chk('index.html');
+ L(i!==null&&i.indexOf('rel="manifest"')>-1,'index.html enlaza al manifest');
+ L(i!==null&&i.indexOf('lmp-pwa.js')>-1,'index.html carga lmp-pwa.js');
+ var s=await chk('lmp-pwa.js');
+ L(s!==null&&s.indexOf('var ctx')>-1,'lmp-pwa.js es la versión nueva');
+ var w=await chk('sw.js');
+ L(w!==null,'sw.js se encuentra');
+ L(w!==null&&w.indexOf('sonido.wav')===-1,'sw.js no usa sonido.wav');
+ setTimeout(function(){L(got,'Chrome ofrece instalar la app')},3000);
+})();
+document.getElementById('b').onclick=function(){var C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator();o.frequency.value=880;o.connect(c.destination);o.start();o.stop(c.currentTime+.3)};
+</script></body></html>
