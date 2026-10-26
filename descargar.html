@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Descargar LMP Mensajería Masiva</title>
+<meta name="theme-color" content="#39ff14">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<style>
+  :root { --fondo:#ffffff; --texto:#10200a; --suave:#4d5f45; --verde:#39ff14; --verde-osc:#0b2e00; --linea:#d9e8d3; --tarjeta:#f4faf1; }
+  @media (prefers-color-scheme: dark) { :root { --fondo:#0b1408; --texto:#eef8e9; --suave:#a5b99b; --linea:#243a1c; --tarjeta:#122010; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--fondo); color:var(--texto); line-height:1.5;
+         padding: max(20px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom)); }
+  main { max-width:480px; margin:0 auto; }
+  .logo { width:84px; height:84px; border-radius:22px; display:block; margin:12px 0 18px; }
+  h1 { font-size:1.75rem; line-height:1.15; margin:0 0 8px; }
+  p.lema { margin:0 0 24px; color:var(--suave); }
+  button.instalar { width:100%; padding:18px; font-size:1.15rem; font-weight:700; border:0; border-radius:16px; background:var(--verde); color:var(--verde-osc); cursor:pointer; }
+  button.instalar:focus-visible { outline:3px solid var(--texto); outline-offset:3px; }
+  #estado { min-height:1.5em; margin:10px 0 0; color:var(--suave); font-size:.95rem; }
+  section { background:var(--tarjeta); border:1px solid var(--linea); border-radius:14px; padding:16px 18px; margin-top:18px; }
+  h2 { font-size:1.05rem; margin:0 0 8px; }
+  ol { margin:0; padding-left:1.2em; } li { margin:4px 0; }
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="icon-192.png" alt="Logo LMP">
+  <h1>LMP Mensajería Masiva</h1>
+  <p class="lema">Conectados en privado. Comunicados sin límites.</p>
+
+  <button class="instalar" id="btn">Instalar app</button>
+  <p id="estado" role="status"></p>
+
+  <section>
+    <h2>En Android (Chrome)</h2>
+    <ol>
+      <li>Tocá el botón Instalar app.</li>
+      <li>Si no aparece, abrí el menú ⋮ de Chrome y elegí Instalar aplicación.</li>
+      <li>Abrí LMP desde el ícono en tu pantalla de inicio y tocá Activar sonido.</li>
+    </ol>
+  </section>
+  <section>
+    <h2>En iPhone (Safari)</h2>
+    <ol>
+      <li>Tocá el botón Compartir.</li>
+      <li>Elegí Agregar a pantalla de inicio.</li>
+    </ol>
+  </section>
+</main>
+<script src="lmp-pwa.js"></script>
+<script>
+  var btn = document.getElementById('btn'), est = document.getElementById('estado');
+  var instalada = window.matchMedia('(display-mode: standalone)').matches;
+  if (instalada) { est.textContent = 'La app ya está instalada en este celular.'; btn.textContent = 'Abrir LMP'; }
+  btn.addEventListener('click', function () {
+    if (instalada) { location.href = 'index.html'; return; }
+    if (LMP.puedeInstalar()) {
+      LMP.instalar().then(function (ok) { est.textContent = ok ? 'Listo, buscá el ícono LMP en tu pantalla de inicio.' : 'Instalación cancelada.'; });
+    } else {
+      est.textContent = 'Abrí el menú ⋮ de Chrome y elegí Instalar aplicación.';
+    }
+  });
+</script>
+</body>
+</html>
