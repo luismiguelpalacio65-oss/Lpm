@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="0;url=index-v5.html">
-<title>LMP Mensajería Masiva</title>
-<script>location.replace("index-v5.html"+location.hash)</script></head>
-<body><p><a href="index-v5.html">Entrar a LMP</a></p></body></html>
+<title>LMP Mensajería Masiva</title></head>
+<body><p id="m">Cargando LMP…</p>
+<script>
+var L=["index-v5.html","index-v5-1.html","index-v5-2.html","index-v4.html","index-v3.html"],i=0;
+function t(){if(i>=L.length){document.getElementById("m").textContent="No se encontró la app.";return}
+var f=L[i++];fetch(f,{method:"HEAD",cache:"no-store"}).then(function(r){if(r.ok)location.replace(f+location.hash);else t()}).catch(t)}
+t();
+</script></body></html>
