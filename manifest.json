@@ -2,7 +2,7 @@
   "name": "LMP Mensajería Masiva",
   "short_name": "LMP",
   "description": "Conectados en privado. Comunicados sin límites.",
-  "start_url": "./index-v3.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
