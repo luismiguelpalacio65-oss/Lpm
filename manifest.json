@@ -2,16 +2,16 @@
   "name": "LMP Mensajería Masiva",
   "short_name": "LMP",
   "description": "Conectados en privado. Comunicados sin límites.",
-  "start_url": "./index.html",
+  "start_url": "./index-v3.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0027db",
+  "background_color": "#ffffff",
   "theme_color": "#39ff14",
   "lang": "es",
   "icons": [
-    { "src": "logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "logo-mask-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "lmp-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "lmp-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "lmp-mask-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
