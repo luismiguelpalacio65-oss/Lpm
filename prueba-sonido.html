@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prueba de sonido LMP</title>
+<style>
+body{font:16px system-ui,sans-serif;margin:0;padding:16px;background:#fff;color:#0b1f0b}
+h1{font-size:20px;margin:0 0 4px}
+p{margin:6px 0}
+button{display:block;width:100%;padding:16px;margin:12px 0 4px;font-size:17px;font-weight:700;border:3px solid #39ff14;border-radius:16px;background:#fff;color:#0b1f0b}
+.r{min-height:22px;font-size:14px;padding:6px 8px;background:#f1f5f1;border-radius:8px;white-space:pre-wrap}
+.ok{background:#d9ffd0}.mal{background:#ffe0e0}
+</style></head><body>
+<h1>🔧 Prueba de sonido y avisos</h1>
+<p>Tocá cada botón en orden y fijate qué dice la cajita de abajo. Antes de empezar, subí el volumen <b>multimedia</b> del celular al máximo.</p>
+
+<button onclick="t1()">1) Sonido con audio (método 1)</button>
+<div class="r" id="r1">Sin probar</div>
+
+<button onclick="t2()">2) Sonido con WebAudio (método 2)</button>
+<div class="r" id="r2">Sin probar</div>
+
+<button onclick="t3()">3) Vibración</button>
+<div class="r" id="r3">Sin probar</div>
+
+<button onclick="t4()">4) Permiso de notificaciones</button>
+<div class="r" id="r4">Sin probar</div>
+
+<button onclick="t5()">5) Aviso de prueba</button>
+<div class="r" id="r5">Sin probar</div>
+
+<p style="font-size:12px;color:#555;margin-top:18px" id="info"></p>
+
+<script>
+function say(i,t,ok){var e=document.getElementById("r"+i);e.textContent=t;e.className="r "+(ok===true?"ok":ok===false?"mal":"")}
+function wav(){var sr=11025,N=Math.floor(sr*0.6),b=new ArrayBuffer(44+N*2),w=new DataView(b);function S(o,t){for(var q=0;q<t.length;q++)w.setUint8(o+q,t.charCodeAt(q))}
+S(0,"RIFF");w.setUint32(4,36+N*2,true);S(8,"WAVE");S(12,"fmt ");w.setUint32(16,16,true);w.setUint16(20,1,true);w.setUint16(22,1,true);w.setUint32(24,sr,true);w.setUint32(28,sr*2,true);w.setUint16(32,2,true);w.setUint16(34,16,true);S(36,"data");w.setUint32(40,N*2,true);
+for(var i=0;i<N;i++){var e=Math.sin(Math.PI*i/N);w.setInt16(44+i*2,Math.round(Math.sin(2*Math.PI*880*i/sr)*e*28000),true)}
+var u=new Uint8Array(b),bs="";for(i=0;i<u.length;i++)bs+=String.fromCharCode(u[i]);return"data:audio/wav;base64,"+btoa(bs)}
+function t1(){try{var a=new Audio(wav());a.volume=1;var p=a.play();
+ if(p&&p.then)p.then(function(){say(1,"▶ El celular aceptó reproducir. ¿Escuchaste un 'piiii'? Si NO: subí el volumen multimedia o revisá que el sitio no esté silenciado en Chrome.",true)}).catch(function(e){say(1,"❌ Chrome bloqueó el audio: "+(e&&e.name)+" — "+(e&&e.message),false)});
+ else say(1,"▶ Reproduciendo (sin confirmación del navegador).",true)}catch(e){say(1,"❌ Error: "+e,false)}}
+var AC=null;
+function t2(){try{var C=window.AudioContext||window.webkitAudioContext;if(!C){say(2,"❌ Este navegador no tiene WebAudio",false);return}
+ if(!AC)AC=new C();var go=function(){var o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.value=1000;g.gain.value=0.8;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+0.5);say(2,"▶ WebAudio en marcha (estado: "+AC.state+"). ¿Escuchaste un 'piiii'?",true)};
+ if(AC.state=="running")go();else AC.resume().then(go).catch(function(e){say(2,"❌ No se pudo activar: "+e,false)})}catch(e){say(2,"❌ Error: "+e,false)}}
+function t3(){if(!navigator.vibrate){say(3,"❌ Este navegador no permite vibrar",false);return}
+ var r=navigator.vibrate([200,100,200]);say(3,r?"▶ Orden de vibrar enviada. ¿Vibró el celular? Si no, revisá que no esté en modo no molestar.":"❌ El navegador rechazó la vibración",!!r)}
+function t4(){if(!("Notification" in window)){say(4,"❌ Este navegador no permite notificaciones",false);return}
+ var p=Notification.permission;
+ if(p=="granted"){say(4,"✅ Ya están PERMITIDAS.",true);return}
+ if(p=="denied"){say(4,"❌ Están BLOQUEADAS. Tocá el candado junto a la dirección → Permisos → Notificaciones → Permitir. Después recargá la página.",false);return}
+ say(4,"Esperando que aceptes el cartel…");
+ var f=function(x){say(4,x=="granted"?"✅ Permitidas.":"❌ Resultado: "+x+". Si no apareció ningún cartel, activalo en Chrome: ⋮ → Configuración → Configuración de sitios → Notificaciones.",x=="granted")};
+ try{var r=Notification.requestPermission(f);if(r&&r.then)r.then(f)}catch(e){say(4,"❌ Error: "+e,false)}}
+function t5(){if(!("Notification" in window)||Notification.permission!="granted"){say(5,"Primero hacé el paso 4 y aceptá el permiso.",false);return}
+ var show=function(r){return r.showNotification("LMP",{body:"Prueba de aviso: funciona ✅"}).then(function(){say(5,"✅ Aviso enviado. Bajá la barra de notificaciones del celular para verlo.",true)})};
+ if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration){navigator.serviceWorker.getRegistration().then(function(r){if(r)return show(r);try{new Notification("LMP",{body:"Prueba de aviso: funciona ✅"});say(5,"✅ Aviso enviado. Bajá la barra de notificaciones.",true)}catch(e){say(5,"❌ En Android, Chrome solo muestra avisos si la app tiene el servicio de avisos instalado. En esta página no está; probalo desde la app instalada.",false)}}).catch(function(e){say(5,"❌ "+e,false)})}
+ else say(5,"❌ No hay servicio de avisos disponible",false)}
+document.getElementById("info").textContent="Navegador: "+navigator.userAgent;
+</script></body></html>
